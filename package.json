@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/heroku-examples/node-socket.io/issues"
   },
-  "homepage": "https://github.com/heroku-examples/node-socket.io#readme"
+  "homepage": "https://github.com/heroku-examples/node-socket.io#readme",
+  "devDependencies": {}
 }
