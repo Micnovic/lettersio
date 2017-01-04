@@ -1,14 +1,17 @@
 <html>
   <body>
     <p id='server-time'></p>
+    <canvas id="ctx" width="600" height="500" style="border:1px solid #000000"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
       var el = document.getElementById('server-time');
+      var ctx = document.getElementById("ctx").getContext("2d");
 
       socket.on('time', function(timeString) {
-        el.innerHTML = 'Server time: ' + timeString;
+        ctx.fillText("Server time is: " + timeString, 50, 50);
       });
+
     </script>
   </body>
 </html>
