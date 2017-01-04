@@ -21,3 +21,5 @@ function newConnection(socket){
 }
 
 setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
+
+console.log('local changes');
