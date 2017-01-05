@@ -13,11 +13,30 @@ const server = express()
 
 const io = socketIO(server);
 
+//Create set of letter
+var letters = [];
+function makeRandomLetter()
+{
+  var text = "";
+  var possible = "ОООАААЕЕЕИИИНННТТТРРРСССЛЛЛВВВККППММУУДДЯЯЫЫЬЬЗБГЙЧЮХЖШЦЩФЭЪ";
+  text = possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+for(var i = 0; i < 100; i++)
+{
+  letters.push(
+    {
+      char: makeRandomLetter();
+      x: Math.random() * (595 - 5) + 5,
+      y: Math.random() * (595 - 5) + 5
+    });
+}
+
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
   console.log('new connection: ' + socket.id);
+  socket.on('existingSituation', letters);
+
   socket.on('disconnect', () => console.log('Client disconnected'));
 }
-
-setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
