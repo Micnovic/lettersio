@@ -3,7 +3,28 @@
 <script>
   var socket = io();
 
+  var letters = [];
+
+  function Letter(char, x, y, randomRotation){
+    this.char = char;
+    this.x = x;
+    this.y = y;
+    this.rotation = randomRotation;
+    this.size = 8;
+
+  }
+
   function init(){
+    socket.emit('esixting situation', loadExistingSituation);
+    function loadExistingSituation(allLetters)
+    {
+        for(i in allLetters)
+        {
+          letters[i] = new Letter(allLetters[i].char,
+          allLetters[i].x, allLetters[i].y,
+          (Math.random()-0.5)*(Math.PI/32));
+        }
+    }
     window.requestAnimationFrame(draw);
   }
 
