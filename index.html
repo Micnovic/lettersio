@@ -5,13 +5,25 @@
 
   var letters = [];
 
-  function Letter(char, x, y, randomRotation){
+  function Letter(char, x, y, randomRotation, color)
+  {
     this.char = char;
     this.x = x;
     this.y = y;
     this.rotation = randomRotation;
     this.size = 8;
+    this.display = display;
+    this.color = "rgb(" + color.r + ", " + ", " + color.g + ", " + color.b + ")";
 
+    function display()
+    {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
+      ctx.restore();
+    }
   }
 
   function init(){
@@ -22,7 +34,12 @@
         {
           letters[i] = new Letter(allLetters[i].char,
           allLetters[i].x, allLetters[i].y,
-          (Math.random()-0.5)*(Math.PI/32));
+          (Math.random()-0.5)*(Math.PI/32)),
+          {
+            r: Math.random()*255;
+            g: Math.random()*255;
+            b: Math.random()*255;
+          };
         }
     }
     window.requestAnimationFrame(draw);
@@ -31,6 +48,11 @@
   function draw(){
     var ctx = document.getElementById("ctx").getContext("2d");
     ctx.clearRect(0,0,600,600);
+
+    for(var i = 0; i < letters.length; i++)
+    {
+      letters[i].display();
+    }
 
     window.requestAnimationFrame(draw);
   }
