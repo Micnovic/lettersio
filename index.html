@@ -15,7 +15,7 @@
   }
 
   function init(){
-    socket.emit('esixting situation', loadExistingSituation);
+    socket.on('existingSituation', loadExistingSituation);
     function loadExistingSituation(allLetters)
     {
         for(i in allLetters)

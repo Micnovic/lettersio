@@ -36,7 +36,7 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
   console.log('new connection: ' + socket.id);
-  socket.on('existingSituation', letters);
+  socket.emit('existingSituation', letters);
 
   socket.on('disconnect', () => console.log('Client disconnected'));
 }
