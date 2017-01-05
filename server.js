@@ -27,8 +27,8 @@ for(var i = 0; i < 100; i++)
   letters.push(
     {
       char: makeRandomLetter(),
-      x: Math.random() * (595 - 5) + 5,
-      y: Math.random() * (595 - 5) + 5
+      x: Math.random() * 600,
+      y: Math.random() * 600
     });
 }
 

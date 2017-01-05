@@ -2,10 +2,20 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
+  var ctx = document.getElementById("ctx").getContext("2d");
+  //scale canvas to match coordinates
+  //var canvasWidth = window.innerWidth;
+  //var canvasHeight = window.innerHeight;
+  //var imageWidth = 600;
+  //var imageHeight = 600;
+  //var aspectRatioW = canvasWidth/imageWidth;
+  //var aspectRatioH = canvasHeight/imageHeight;
+  //ctx.scale(aspectRatioW, aspectRatioH);
+  console.log(ctx.clientWidth);
 
   var letters = [];
 
-  function Letter(char, x, y, randomRotation, color)
+  function Letter(char, x, y, randomRotation)
   {
     this.char = char;
     this.x = x;
@@ -13,40 +23,39 @@
     this.rotation = randomRotation;
     this.size = 8;
     this.display = display;
-    this.color = "rgb(" + color.r + ", " + ", " + color.g + ", " + color.b + ")";
+    this.color = "rgb(100,200,30)";
 
     function display()
     {
       ctx.save();
       ctx.translate(this.x, this.y);
-      ctx.rotate(this.rotation);
+      //ctx.rotate(this.rotation);
       ctx.fillStyle = this.color;
-      ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
+      ctx.fillRect(this.x, this.y, this.size, this.size);
       ctx.restore();
     }
   }
 
   function init(){
     socket.on('existingSituation', loadExistingSituation);
+    var numberOfLetters = 0;
     function loadExistingSituation(allLetters)
     {
         for(i in allLetters)
         {
-          letters[i] = new Letter(allLetters[i].char,
-          allLetters[i].x, allLetters[i].y,
-          (Math.random()-0.5)*(Math.PI/32)),
-          {
-            r: Math.random()*255;
-            g: Math.random()*255;
-            b: Math.random()*255;
-          };
+          letters[i] = new Letter(
+            allLetters[i].char,
+            allLetters[i].x, allLetters[i].y,
+            (Math.random()-0.5)*(Math.PI/32)
+          );
+          numberOfLetters++;
         }
+        console.log(numberOfLetters + " letters loaded");
     }
     window.requestAnimationFrame(draw);
   }
 
   function draw(){
-    var ctx = document.getElementById("ctx").getContext("2d");
     ctx.clearRect(0,0,600,600);
 
     for(var i = 0; i < letters.length; i++)
