@@ -26,7 +26,7 @@ for(var i = 0; i < 100; i++)
 {
   letters.push(
     {
-      char: makeRandomLetter()
+      char: makeRandomLetter(),
       x: Math.random() * (595 - 5) + 5,
       y: Math.random() * (595 - 5) + 5
     });
