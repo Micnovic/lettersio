@@ -38,5 +38,21 @@ function newConnection(socket){
   console.log('new connection: ' + socket.id);
   socket.emit('existingSituation', letters);
 
+  socket.on('newLetterPosition', setNewLetterPosition);
+
+  function setNewLetterPosition(data)
+  {
+    //console.log("recieveng new position: " + data.x);
+    letters[data.position].x = data.x;
+    letters[data.position].y = data.y;
+    var pack =
+    {
+      i: data.position,
+      x: data.x,
+      y: data.y
+    }
+    socket.broadcast.emit('updateSituation', pack);
+  }
+
   socket.on('disconnect', () => console.log('Client disconnected'));
 }

@@ -75,6 +75,11 @@
   document.getElementById("ctx").onmousedown = onMouseDown;
   document.getElementById("ctx").onmouseup = onMouseUp;
 
+  function updateSituation(data){
+    letters[data.i].x = data.x;
+    letters[data.i].y = data.y;
+  }
+
   function draw(){
     ctx.clearRect(0,0,600,600);
 
@@ -103,7 +108,10 @@
           y: letters[i].y
         }
         console.log("New position!");
+        socket.emit('newLetterPosition', data);
       }
+
+      socket.on('updateSituation', updateSituation);
       letters[i].display();
     }
 
