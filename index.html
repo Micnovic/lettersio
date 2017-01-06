@@ -1,10 +1,151 @@
-<canvas id="ctx" width="600" height="500" style="border:1px solid #000000"></canvas>
+<canvas id="ctx" width="600" height="600" style="border:1px solid #000000"></canvas>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
   var ctx = document.getElementById("ctx").getContext("2d");
-  socket.on('time', function(timeString) {
-    ctx.fillText("Server time is: " + timeString, 100, 100);
-    ctx.fillText("Work in progress", 100, 150);
-  });
+
+  var letters = [];
+  var numberOfLetters = 0;
+
+  ctx.font = "30px monospace";
+
+  var mouseX = 0;
+  var mouseY = 0;
+
+  function Letter(char, x, y, randomRotation, id)
+  {
+    this.id = id;
+    this.char = char;
+    this.x = x;
+    this.y = y;
+    this.rotation = randomRotation;
+    this.h = 12;
+    this.w = 20;
+    this.display = display;
+    this.color = "rgb("+
+    Math.floor(Math.random()*255)+ ","+
+    Math.floor(Math.random()*255)+ ","+
+    Math.floor(Math.random()*255)+")";
+
+    this.dragging = false; // Is the object being dragged?
+    this.rollover = false; // Is the mouse over the object?
+    this.offsetX;
+    this.offsetY; // Mouse offset
+
+    function display()
+    {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.strokeRect(0, 0, this.h, -this.w);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 3;
+      ctx.shadowColor = '#cccccc';
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      ctx.fillText(this.char, 0, 0);
+      ctx.restore();
+    }
+  }
+
+  function init(){
+    socket.on('existingSituation', loadExistingSituation);
+    function loadExistingSituation(allLetters)
+    {
+        for(i in allLetters)
+        {
+          letters[i] = new Letter(
+            allLetters[i].char,
+            allLetters[i].x, allLetters[i].y,
+            (Math.random()-0.5)*(Math.PI/16),
+            numberOfLetters //using as letter's id
+          );
+          numberOfLetters++;
+        }
+        console.log(numberOfLetters + " letters loaded");
+    }
+    window.requestAnimationFrame(draw);
+  }
+
+  document.onmousemove = function(mouse)
+  {
+    mouseX = mouse.clientX - 4; //correction because canvas is shifted by 4,4
+    mouseY = mouse.clientY - 4;
+  }
+  document.getElementById("ctx").onmousedown = onMouseDown;
+  document.getElementById("ctx").onmouseup = onMouseUp;
+
+  function updateSituation(data){
+    letters[data.i].x = data.x;
+    letters[data.i].y = data.y;
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,600,600);
+
+    for(var i = 0; i < letters.length; i++)
+    {
+      if (mouseX > letters[i].x &&
+          mouseX < letters[i].x + letters[i].w &&
+          mouseY > letters[i].y - letters[i].h &&
+          mouseY < letters[i].y)
+      {
+          letters[i].rollover = true;
+          console.log("Rollover!");
+      }
+      else
+      {
+          letters[i].rollover = false;
+      }
+
+      if (letters[i].dragging == true)
+      {
+        letters[i].x = mouseX + letters[i].offsetX;
+        letters[i].y = mouseY + letters[i].offsetY;
+        var data = {
+          position: i,
+          x: letters[i].x,
+          y: letters[i].y
+        }
+        console.log("New position!");
+        socket.emit('newLetterPosition', data);
+      }
+
+      socket.on('updateSituation', updateSituation);
+      letters[i].display();
+    }
+
+    window.requestAnimationFrame(draw);
+  }
+
+  function onMouseDown()
+  {
+    for (var i = 0; i < letters.length; i++)
+    {
+      if (mouseX > letters[i].x &&
+          mouseX < letters[i].x + letters[i].w &&
+          mouseY > letters[i].y - letters[i].h &&
+          mouseY < letters[i].y)
+      {
+        letters[i].dragging = true;
+        letters[i].offsetX = letters[i].x - mouseX;
+        letters[i].offsetY = letters[i].y - mouseY;
+        console.log("being dragged");
+      }
+    }
+    console.log("Clicked!");
+  }
+
+  function onMouseUp()
+  {
+    for (var i = 0; i < letters.length; i++)
+    {
+      letters[i].dragging = false;
+    }
+    console.log("Released!");
+  }
+
+
+  init();
+
 </script>
