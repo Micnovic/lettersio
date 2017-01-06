@@ -3,17 +3,10 @@
 <script>
   var socket = io();
   var ctx = document.getElementById("ctx").getContext("2d");
-  //scale canvas to match coordinates
-  //var canvasWidth = window.innerWidth;
-  //var canvasHeight = window.innerHeight;
-  //var imageWidth = 600;
-  //var imageHeight = 600;
-  //var aspectRatioW = canvasWidth/imageWidth;
-  //var aspectRatioH = canvasHeight/imageHeight;
-  //ctx.scale(aspectRatioW, aspectRatioH);
-  console.log(ctx.clientWidth);
 
   var letters = [];
+
+  ctx.font = "30px monospace";
 
   function Letter(char, x, y, randomRotation)
   {
@@ -21,17 +14,25 @@
     this.x = x;
     this.y = y;
     this.rotation = randomRotation;
-    this.size = 8;
+    this.size = 15;
     this.display = display;
-    this.color = "rgb(100,200,30)";
+    this.color = "rgb("+
+    Math.floor(Math.random()*255)+ ","+
+    Math.floor(Math.random()*255)+ ","+
+    Math.floor(Math.random()*255)+")";
 
     function display()
     {
       ctx.save();
       ctx.translate(this.x, this.y);
-      //ctx.rotate(this.rotation);
+      ctx.rotate(this.rotation);
       ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.size, this.size);
+      ctx.shadowBlur = 3;
+      ctx.shadowColor = '#cccccc';
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      //ctx.fillRect(0, 0, this.size, this.size);
+      ctx.fillText(this.char, 0, 0);
       ctx.restore();
     }
   }
@@ -46,7 +47,7 @@
           letters[i] = new Letter(
             allLetters[i].char,
             allLetters[i].x, allLetters[i].y,
-            (Math.random()-0.5)*(Math.PI/32)
+            (Math.random()-0.5)*(Math.PI/16)
           );
           numberOfLetters++;
         }
