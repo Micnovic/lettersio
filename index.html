@@ -12,10 +12,14 @@
   var mouseX = 0;
   var mouseY = 0;
 
+  var cooldown = 0;
+
   function Letter(char, x, y, randomRotation, id)
   {
     this.id = id;
     this.char = char;
+    this.serverX = x;
+    this.serverY = y;
     this.x = x;
     this.y = y;
     this.rotation = randomRotation;
@@ -76,8 +80,15 @@
   document.getElementById("ctx").onmouseup = onMouseUp;
 
   function updateSituation(data){
-    letters[data.i].x = data.x;
-    letters[data.i].y = data.y;
+    letters[data.i].serverX = data.x;
+    letters[data.i].serverY = data.y;
+  }
+
+  function synchronize(i){
+    if(letters[i].dragging == false){
+      letters[i].x = letters[i].serverX;
+      letters[i].y = letters[i].serverY;
+    }
   }
 
   function draw(){
@@ -91,7 +102,6 @@
           mouseY < letters[i].y)
       {
           letters[i].rollover = true;
-          console.log("Rollover!");
       }
       else
       {
@@ -107,11 +117,16 @@
           x: letters[i].x,
           y: letters[i].y
         }
-        console.log("New position!");
-        socket.emit('newLetterPosition', data);
+        cooldown++; //Rise cooldown while moving letter
+        if(cooldown>20)
+        {
+          socket.emit('newLetterPosition', data);
+          cooldown = 0;
+          console.log('position sended!');
+        }
       }
 
-      socket.on('updateSituation', updateSituation);
+      synchronize(i);
       letters[i].display();
     }
 
@@ -145,7 +160,7 @@
     console.log("Released!");
   }
 
-
+  socket.on('updateSituation', updateSituation);
   init();
 
 </script>
