@@ -5,16 +5,18 @@
   var ctx = document.getElementById("ctx").getContext("2d");
 
   var letters = [];
+  var numberOfLetters = 0;
 
   ctx.font = "30px monospace";
 
-  function Letter(char, x, y, randomRotation)
+  function Letter(char, x, y, randomRotation, id)
   {
+    this.id = id;
     this.char = char;
     this.x = x;
     this.y = y;
     this.rotation = randomRotation;
-    this.size = 15;
+    this.size = 30;
     this.display = display;
     this.color = "rgb("+
     Math.floor(Math.random()*255)+ ","+
@@ -25,13 +27,13 @@
     {
       ctx.save();
       ctx.translate(this.x, this.y);
+      ctx.strokeRect(1, 0, this.size/2-2, -this.size+10);
       ctx.rotate(this.rotation);
       ctx.fillStyle = this.color;
       ctx.shadowBlur = 3;
       ctx.shadowColor = '#cccccc';
       ctx.shadowOffsetX = 2;
       ctx.shadowOffsetY = 2;
-      //ctx.fillRect(0, 0, this.size, this.size);
       ctx.fillText(this.char, 0, 0);
       ctx.restore();
     }
@@ -39,7 +41,6 @@
 
   function init(){
     socket.on('existingSituation', loadExistingSituation);
-    var numberOfLetters = 0;
     function loadExistingSituation(allLetters)
     {
         for(i in allLetters)
@@ -47,7 +48,8 @@
           letters[i] = new Letter(
             allLetters[i].char,
             allLetters[i].x, allLetters[i].y,
-            (Math.random()-0.5)*(Math.PI/16)
+            (Math.random()-0.5)*(Math.PI/16),
+            numberOfLetters //using as letter's id
           );
           numberOfLetters++;
         }
