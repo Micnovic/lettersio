@@ -58,8 +58,8 @@ function newConnection(socket){
       x: data.x,
       y: data.y
     }
-    //socket.broadcast.emit('updateSituation', pack);
-    io.sockets.emit('updateSituation', pack);
+    socket.broadcast.emit('updateSituation', pack);
+    //io.sockets.emit('updateSituation', pack);
   }
 
   //socket.on('reset', init);

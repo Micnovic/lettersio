@@ -92,10 +92,33 @@
     if(letters[i].dragging == false){
       //letters[i].x = letters[i].serverX;
       //letters[i].y = letters[i].serverY;
-      if(letters[i].x < letters[i].serverX) {letters[i].x += speed;}
-      if(letters[i].y < letters[i].serverY) {letters[i].y += speed;}
-      if(letters[i].x > letters[i].serverX) {letters[i].x -= speed;}
-      if(letters[i].y > letters[i].serverY) {letters[i].y -= speed;}
+      if(letters[i].x < letters[i].serverX)
+      {
+        if(letters[i].serverX - letters[i].x > speed){letters[i].x += speed;}
+        else {letters[i].x = letters[i].serverX;}
+      }
+
+      if(letters[i].x > letters[i].serverX)
+      {
+        if(letters[i].x - letters[i].serverX > speed){letters[i].x -= speed;}
+        else {letters[i].x = letters[i].serverX;}
+      }
+
+      if(letters[i].y < letters[i].serverY)
+      {
+        if(letters[i].serverY - letters[i].y > speed){letters[i].y += speed;}
+        else {letters[i].y = letters[i].serverY;}
+      }
+
+      if(letters[i].y > letters[i].serverY)
+      {
+        if(letters[i].y - letters[i].serverY > speed){letters[i].y -= speed;}
+        else {letters[i].y = letters[i].serverY;}
+      }
+
+      //if(letters[i].y < letters[i].serverY) {letters[i].y += speed;}
+      //if(letters[i].x > letters[i].serverX) {letters[i].x -= speed;}
+      //if(letters[i].y > letters[i].serverY) {letters[i].y -= speed;}
     }
   }
 
@@ -127,6 +150,8 @@
 
         letters[i].x = mouseX + letters[i].offsetX;
         letters[i].y = mouseY + letters[i].offsetY;
+        letters[i].serverX = mouseX + letters[i].offsetX;
+        letters[i].serverY = mouseY + letters[i].offsetY;
 
         var data = {
           position: i,
