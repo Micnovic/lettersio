@@ -22,10 +22,10 @@ function makeRandomLetter()
   text = possible.charAt(Math.floor(Math.random() * possible.length));
   return text;
 }
-function init(password){
-  if(password == 'please')
-  {
-    letters = [];
+//function init(password){
+//  if(password == 'please')
+//  {
+  //  letters = [];
     for(var i = 0; i < 100; i++)
     {
       letters.push(
@@ -35,9 +35,9 @@ function init(password){
           y: Math.random() * 600
         });
     }
-  }
-}
-init('please');
+  //}
+//}
+//init('please');
 
 io.sockets.on('connection', newConnection);
 
@@ -62,6 +62,6 @@ function newConnection(socket){
     io.sockets.emit('updateSituation', pack);
   }
 
-  socket.on('reset', init);
+  //socket.on('reset', init);
   socket.on('disconnect', () => console.log('Client disconnected'));
 }
