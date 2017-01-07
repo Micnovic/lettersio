@@ -39,6 +39,7 @@ function makeRandomLetter()
 //}
 //init('please');
 
+
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
