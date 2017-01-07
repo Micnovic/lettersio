@@ -113,8 +113,14 @@
 
       if (letters[i].dragging == true)
       {
+        //if (letters[i].x > canvasWidth) {letters[i].x = canvasWidth;}
+      //  if (letters[i].x < 0) {letters[i].x = 0;}
+      //  if (letters[i].y > canvasHeight) {letters[i].y = canvasHeight;}
+      //  if (letters[i].y < 0) {letters[i].y = 0;}
+
         letters[i].x = mouseX + letters[i].offsetX;
         letters[i].y = mouseY + letters[i].offsetY;
+
         var data = {
           position: i,
           x: letters[i].x,
@@ -149,10 +155,6 @@
         letters[i].offsetX = letters[i].x - mouseX;
         letters[i].offsetY = letters[i].y - mouseY;
       }
-      if (letters[i].x > canvasWidth) {letters[i].x = canvasWidth;}
-      if (letters[i].x < 0) {letters[i].x = 0;}
-      if (letters[i].y > canvasHeight) {letters[i].y = canvasHeight;}
-      if (letters[i].y < 0) {letters[i].y = 0;}
     }
     console.log("Clicked!");
   }
