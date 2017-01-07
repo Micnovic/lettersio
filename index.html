@@ -110,7 +110,8 @@
           mouseY < letters[i].y)
       {
           letters[i].rollover = true;
-          console.log('Rollover');
+          for(var j = 0; j<i; j++){letters[j].rollover = false;}
+          //console.log('Rollover' + letters[i].id);
       }
       else
       {
@@ -133,11 +134,11 @@
           y: letters[i].y
         }
         cooldown++; //Rise cooldown while moving letter
-        if(cooldown>10)
+        if(cooldown>20)
         {
           socket.emit('newLetterPosition', data);
           cooldown = 0;
-          console.log('position sended!');
+          //console.log('position sended!');
         }
       }
 
@@ -161,14 +162,15 @@
       if (mouseX > letters[i].x &&
           mouseX < letters[i].x + letters[i].w &&
           mouseY > letters[i].y - letters[i].h &&
-          mouseY < letters[i].y)
+          mouseY < letters[i].y &&
+          letters[i].rollover == true)
       {
         letters[i].dragging = true;
         letters[i].offsetX = letters[i].x - mouseX;
         letters[i].offsetY = letters[i].y - mouseY;
       }
     }
-    console.log("Clicked!");
+    //console.log("Clicked!");
   }
 
   function onMouseUp()
@@ -184,7 +186,7 @@
       letters[i].dragging = false;
       socket.emit('newLetterPosition', data);
     }
-    console.log("Released!");
+    //console.log("Released!");
   }
 
   socket.on('updateSituation', updateSituation);
