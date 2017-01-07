@@ -164,7 +164,13 @@
     cooldown = 0;
     for (var i = 0; i < letters.length; i++)
     {
+      var data = {
+        position: i,
+        x: letters[i].x,
+        y: letters[i].y
+      }
       letters[i].dragging = false;
+      socket.emit('newLetterPosition', data);
     }
     console.log("Released!");
   }
