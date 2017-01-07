@@ -43,7 +43,7 @@
     {
       ctx.save();
       ctx.translate(this.x, this.y);
-      //ctx.strokeRect(-2, -1, this.h, -this.w);
+      //tx.strokeRect(-2, -1, this.h, -this.w);
       ctx.rotate(this.rotation);
       ctx.fillStyle = this.color;
       ctx.shadowBlur = 3;
@@ -85,6 +85,14 @@
   function updateSituation(data){
     letters[data.i].serverX = data.x;
     letters[data.i].serverY = data.y;
+  }
+
+  function borderCheck(ltr)
+  {
+    if (ltr.x + ltr.w > canvasWidth) {ltr.x = canvasWidth - ltr.w + 5}
+    if (ltr.x < 0)           {ltr.x = 5;}
+    if (ltr.y > canvasHeight){ltr.y = canvasHeight;}
+    if (ltr.y < 0)           {ltr.y = ltr.h * 2;}
   }
 
   function synchronize(i){
@@ -167,6 +175,7 @@
         }
       }
 
+      borderCheck(letters[i]);
       synchronize(i);
       letters[i].display();
     }
