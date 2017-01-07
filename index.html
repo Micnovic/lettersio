@@ -1,4 +1,4 @@
-<canvas id="ctx" width="600" height="600" style="border:1px solid #000000"></canvas>
+<canvas id="ctx" width="600" height="600" style="border:1px solid #cccccc"></canvas>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
@@ -26,8 +26,8 @@
     this.x = x;
     this.y = y;
     this.rotation = randomRotation;
-    this.h = 12;
-    this.w = 20;
+    this.h = 15;
+    this.w = 22;
     this.display = display;
     this.color = "rgb("+
     Math.floor(Math.random()*255)+ ","+
@@ -43,14 +43,14 @@
     {
       ctx.save();
       ctx.translate(this.x, this.y);
-      //ctx.strokeRect(0, 0, this.h, -this.w);
+      //ctx.strokeRect(-2, -1, this.h, -this.w);
       ctx.rotate(this.rotation);
       ctx.fillStyle = this.color;
       ctx.shadowBlur = 3;
       ctx.shadowColor = '#cccccc';
       ctx.shadowOffsetX = 2;
       ctx.shadowOffsetY = 2;
-      ctx.fillText(this.char, 0, 0);
+      ctx.fillText(this.char, -3, 0);
       ctx.restore();
     }
   }
@@ -76,8 +76,8 @@
 
   document.onmousemove = function(mouse)
   {
-    mouseX = mouse.clientX - 4; //correction because canvas is shifted by 4,4
-    mouseY = mouse.clientY - 4;
+    mouseX = mouse.clientX - 5; //correction because canvas is shifted by 5,5
+    mouseY = mouse.clientY - 5;
   }
   document.getElementById("ctx").onmousedown = onMouseDown;
   document.getElementById("ctx").onmouseup = onMouseUp;
@@ -88,9 +88,14 @@
   }
 
   function synchronize(i){
+    var speed = 5;
     if(letters[i].dragging == false){
-      letters[i].x = letters[i].serverX;
-      letters[i].y = letters[i].serverY;
+      //letters[i].x = letters[i].serverX;
+      //letters[i].y = letters[i].serverY;
+      if(letters[i].x < letters[i].serverX) {letters[i].x += speed;}
+      if(letters[i].y < letters[i].serverY) {letters[i].y += speed;}
+      if(letters[i].x > letters[i].serverX) {letters[i].x -= speed;}
+      if(letters[i].y > letters[i].serverY) {letters[i].y -= speed;}
     }
   }
 
@@ -105,6 +110,7 @@
           mouseY < letters[i].y)
       {
           letters[i].rollover = true;
+          console.log('Rollover');
       }
       else
       {
@@ -138,6 +144,12 @@
       synchronize(i);
       letters[i].display();
     }
+
+    ctx.save();
+    ctx.font = "8px monospace";
+    ctx.fillStyle = "#cccccc";
+    ctx.fillText("Lettersio, Gleb Micnovic", 480, 595);
+    ctx.restore();
 
     window.requestAnimationFrame(draw);
   }
