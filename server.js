@@ -22,6 +22,23 @@ function makeRandomLetter()
   text = possible.charAt(Math.floor(Math.random() * possible.length));
   return text;
 }
+
+var charCounter = 0;
+function addLetter()
+{
+  var text = "";
+  var possible = "ОООАААЕЕЕИИИНННТТТРРРСССЛЛЛВВВККППММУУДДЯЯЫЫЬЬЗБГЙЧЮХЖШЦЩФЭЪ";
+  var emoji = ["&#x2713", "&#x2713"];
+  if (Math.random() > 0.2){
+    text = possible.charAt(charCounter);
+    charCounter++;
+    if (charCounter > possible.length){charCounter = 0;}
+  } else {
+    text = emoji[Math.floor(Math.random()*emoji.length)];
+  }
+  return text;
+}
+
 //function init(password){
 //  if(password == 'please')
 //  {
@@ -30,7 +47,8 @@ function makeRandomLetter()
     {
       letters.push(
         {
-          char: makeRandomLetter(),
+          char: addLetter(),
+          //char: makeRandomLetter(),
           x: Math.random() * 600,
           y: Math.random() * 600
         });
