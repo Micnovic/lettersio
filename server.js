@@ -15,6 +15,8 @@ const io = socketIO(server);
 
 //Create set of letter
 var letters = [];
+var canvasWidth = 800;
+var canvasHeight = 800;
 function makeRandomLetter()
 {
   var text = "";
@@ -46,14 +48,14 @@ function addLetter()
 //  if(password == 'please')
 //  {
   //  letters = [];
-    for(var i = 0; i < 100; i++)
+    for(var i = 0; i < 200; i++)
     {
       letters.push(
         {
           char: addLetter(),
           //char: makeRandomLetter(),
-          x: Math.random() * 600,
-          y: Math.random() * 600
+          x: 5 + Math.random() * (canvasWidth-10),
+          y: 5 + Math.random() * (canvasHeight-10)
         });
     }
   //}

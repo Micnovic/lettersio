@@ -1,4 +1,4 @@
-<canvas id="ctx" width="600" height="600" style="border:1px solid #cccccc"></canvas>
+<canvas id="ctx" width="800" height="800" style="border:1px solid #cccccc"></canvas>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-16" />
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -8,13 +8,15 @@
   var letters = [];
   var numberOfLetters = 0;
 
-  ctx.font = "30px monospace";
+  var fontSize = 20;
+
+  ctx.font = fontSize+"px monospace";
 
   var mouseX = 0;
   var mouseY = 0;
 
-  var canvasWidth = 600;
-  var canvasHeight = 600;
+  var canvasWidth = 800;
+  var canvasHeight = 800;
 
   var cooldown = 0;
 
@@ -27,8 +29,10 @@
     this.x = x;
     this.y = y;
     this.rotation = randomRotation;
-    this.h = 15;
-    this.w = 22;
+    //this.h = 15;
+    //this.w = 22;
+    this.h = fontSize/2;
+    this.w = (fontSize/30)*22;
     this.display = display;
     this.color = "rgb("+
     Math.floor(Math.random()*255)+ ","+
@@ -44,7 +48,7 @@
     {
       ctx.save();
       ctx.translate(this.x, this.y);
-      //tx.strokeRect(-2, -1, this.h, -this.w);
+      //ctx.strokeRect(-2, -1, this.h, -this.w);
       ctx.rotate(this.rotation);
       ctx.fillStyle = this.color;
       ctx.shadowBlur = 3;
@@ -132,7 +136,7 @@
   }
 
   function draw(){
-    ctx.clearRect(0,0,600,600);
+    ctx.clearRect(0,0,canvasWidth,canvasHeight);
 
     for(var i = 0; i < letters.length; i++)
     {
@@ -184,7 +188,7 @@
     ctx.save();
     ctx.font = "12px monospace";
     ctx.fillStyle = "#cccccc";
-    ctx.fillText("Lettersio, Gleb Micnovic", 425, 595);
+    ctx.fillText("Lettersio, Gleb Micnovic", canvasWidth-175, canvasHeight-5);
     ctx.restore();
 
     window.requestAnimationFrame(draw);
